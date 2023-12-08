@@ -9,7 +9,11 @@ using namespace std;
 
 
 // height and width of the boundary
-const int width = 30;
+const int holdy = 30;
+const int* width = &holdy;
+
+
+
 const int height = 10;
 int ck = 0, rs = 0;
 int scoreee = 0;
@@ -42,7 +46,7 @@ public:
         for (int i = 0; i < 5; i++)
             num[i] = i;
         for (int i = 0; i < 5; i++)
-            numx[i] = rand() % width;
+            numx[i] = rand() % *width;
 
 
         for (int i = 0; i < 5; i++)
@@ -53,14 +57,14 @@ public:
         system("cls");
 
         // Creating top walls with '-'
-        for (int i = 0; i < width + 2; i++)
+        for (int i = 0; i < *width + 2; i++)
             cout << "-";
         cout << endl;
 
         for (int i = 0; i < height; i++) {
-            for (int j = 0; j <= width; j++) {
+            for (int j = 0; j <= *width; j++) {
                 // Creating side walls with '|'
-                if (j == 0 || j == width)
+                if (j == 0 || j == *width)
                     cout << "|";
                 // Creating snake's head with arrow
                 if (i == y && j == x)
@@ -99,7 +103,7 @@ public:
         }
 
         // Creating bottom walls with '-'
-        for (int i = 0; i < width + 2; i++)
+        for (int i = 0; i < *width + 2; i++)
             cout << "-";
         cout << endl;
 
@@ -144,7 +148,7 @@ public:
         }
 
         // Checks for snake's collision with the wall (|)
-        if (x >= width || x < 0 || y >= height || y < 0)
+        if (x >= *width || x < 0 || y >= height || y < 0)
             isGameOver = true;
 
         // Checks for collision with the tail (o)
@@ -162,7 +166,7 @@ public:
             for (int i = 0; i <= rs; i++) {
                 if (i == ck) {
 
-                    numx[rs] = rand() % width;
+                    numx[rs] = rand() % *width;
                     numy[rs] = rand() % height;
                     num[rs] += 5;
                     snakeTailLen++;
@@ -218,7 +222,7 @@ void UpdateGame()
     }
 
     // Checks for snake's collision with the wall (|)
-    if (x >= width || x < 0 || y >= height || y < 0)
+    if (x >= *width || x < 0 || y >= height || y < 0)
         isGameOver = true;
 
     // Checks for collision with the tail (o)
@@ -230,14 +234,10 @@ void UpdateGame()
 //     Checks for snake's collision with the food (#)
     if (x == fruitCordX && y == fruitCordY) {
         playerScore += 1;
-        fruitCordX = rand() % width;
+        fruitCordX = rand() % *width;
         fruitCordY = rand() % height;
         snakeTailLen++;
     }
-
-
-
-
 
 
 }
@@ -247,10 +247,9 @@ void GameInit()
 {
     isGameOver = false;
     sDir = STOP;
-    x = width / 2;
+    x = *width / 2;
     y = height / 2;
-//    fruitCordX = rand() % width;
-//    fruitCordY = rand() % height;
+
 
     playerScore = 0;
 }
@@ -262,15 +261,15 @@ void GameRender(string playerName)
 
 
     // Creating top walls with '-'
-    for (int i = 0; i < width + 2; i++)
+    for (int i = 0; i < *width + 2; i++)
         cout << "-";
     cout << endl;
 
 
     for (int i = 0; i < height; i++) {
-        for (int j = 0; j <= width; j++) {
+        for (int j = 0; j <= *width; j++) {
             // Creating side walls with '|'
-            if (j == 0 || j == width)
+            if (j == 0 || j == *width)
                 cout << "|";
             // Creating snake's head with 'O'
             if (i == y && j == x)
@@ -296,7 +295,7 @@ void GameRender(string playerName)
     }
 
     // Creating bottom walls with '-'
-    for (int i = 0; i < width + 2; i++)
+    for (int i = 0; i < *width + 2; i++)
         cout << "-";
     cout << endl;
 
@@ -400,15 +399,14 @@ int main()
             n1.place(playerName);
             UserInput();
             n1.UpdateGame();
-            // creating a delay for according to the chosen
-            // difficulty
 
             usleep(dfc);
 
         }
         if (isGameOver){
             POINTS.push(scoreee);
-            cout << endl << "GAMEOVER: " << playerName << " " << "scored" << " " << POINTS.top() << " " << "points!"<< endl;
+                cout << endl << "GAMEOVER: " << playerName << " "
+                << "scored" << " " << POINTS.top() << " " << "points!"<< endl;
         }
     }
 
